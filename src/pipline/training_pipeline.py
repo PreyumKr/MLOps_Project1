@@ -3,21 +3,21 @@ from src.exception import MyException
 from src.logger import logging
 
 from src.components.data_ingestion import DataIngestion
-# from src.components.data_validation import DataValidation
+from src.components.data_validation import DataValidation
 # from src.components.data_transformation import DataTransformation
 # from src.components.model_trainer import ModelTrainer
 # from src.components.model_evaluation import ModelEvaluation
 # from src.components.model_pusher import ModelPusher
 
 from src.entity.config_entity import DataIngestionConfig
-# from src.entity.config_entity import DataValidationConfig
+from src.entity.config_entity import DataValidationConfig
 # from src.entity.config_entity import DataTransformationConfig
 # from src.entity.config_entity import ModelTrainerConfig
 # from src.entity.config_entity import ModelEvaluationConfig
 # from src.entity.config_entity import ModelPusherConfig
 
 from src.entity.artifact_entity import DataIngestionArtifact
-# from src.entity.artifact_entity import DataValidationArtifact
+from src.entity.artifact_entity import DataValidationArtifact
 # from src.entity.artifact_entity import DataTransformationArtifact
 # from src.entity.artifact_entity import ModelTrainerArtifact
 # from src.entity.artifact_entity import ModelEvaluationArtifact
@@ -26,6 +26,7 @@ from src.entity.artifact_entity import DataIngestionArtifact
 class TrainingPipeline:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
+        self.data_validation_config = DataValidationConfig()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         try:
@@ -37,10 +38,20 @@ class TrainingPipeline:
         except Exception as e:
             raise MyException(e, sys) from e
         
+    def start_data_validation(self, data_ingestion_artifact: DataIngestionArtifact) -> DataValidationArtifact:
+        try:
+            logging.info(f"{'>>'*5} Starting data validation {'<<'*5}")
+            data_validation = DataValidation(data_ingestion_artifact=data_ingestion_artifact, data_validation_config=self.data_validation_config)
+            data_validation_artifact = data_validation.initiate_data_validation()
+            logging.info(f"{'>>'*5} Completed data validation {'<<'*5}")
+            return data_validation_artifact
+        except Exception as e:
+            raise MyException(e, sys) from e
+        
     def run_pipeline(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
-            # data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
+            data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
             # data_transformation_artifact = self.start_data_transformation(data_validation_artifact=data_validation_artifact)
             # model_trainer_artifact = self.start_model_trainer(data_transformation_artifact=data_transformation_artifact)
             # model_evaluation_artifact = self.start_model_evaluation(model_trainer_artifact=model_trainer_artifact)
