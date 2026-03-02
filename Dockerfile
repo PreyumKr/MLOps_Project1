@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install the dependencies
-RUN pip install -r req.txt
+RUN pip install -r requirements.txt
 
 # Expose the port FastAPI will run on
 EXPOSE 5000
