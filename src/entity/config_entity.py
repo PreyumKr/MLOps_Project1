@@ -61,32 +61,5 @@ class ModelPusherConfig:
 @dataclass
 class VehiclePredictorConfig:
     model_bucket_name: str = MODEL_BUCKET_NAME
-    # Determine model path from the latest artifact directory if available,
-    # otherwise fall back to configured MODEL_FILE_NAME.
-    def _get_latest_model_path() -> str:
-        try:
-            if not os.path.exists(ARTIFACT_DIR):
-                return MODEL_FILE_NAME
-
-            # list only directories inside ARTIFACT_DIR
-            entries = [d for d in os.listdir(ARTIFACT_DIR) if os.path.isdir(os.path.join(ARTIFACT_DIR, d))]
-            if not entries:
-                return MODEL_FILE_NAME
-
-            # timestamps are formatted so lexical sort gives chronological order
-            latest = sorted(entries)[-1]
-            candidate = os.path.join(
-                ARTIFACT_DIR,
-                latest,
-                MODEL_TRAINER_DIR_NAME,
-                MODEL_TRAINER_TRAINED_MODEL_DIR,
-                MODEL_TRAINER_TRAINED_MODEL_NAME,
-            )
-            if os.path.exists(candidate):
-                return candidate
-            return MODEL_FILE_NAME
-        except Exception:
-            return MODEL_FILE_NAME
-
-    model_file_path: str = _get_latest_model_path()
+    model_file_path: str = MODEL_FILE_NAME
     
