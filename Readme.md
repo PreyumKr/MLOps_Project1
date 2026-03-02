@@ -18,4 +18,5 @@
 * Created docker image file for the project, `.dockerignore` excludes the files or directories mentioned in it from the docker build context. So, if we do `docker build` with a `.dockerignore` file there in the same directory the files mentioned in it will not be visible to the `docker build` command so even if there is a `copy .` command in the `dockerfile` the build command can't see the ignored files and those will not be copied.
 * We created a `AWS ECR` repository for our `docker image`, Created a `AWS EC2` instance and installed docker in it and then used Github Actions for **`AWS EC2`** deployment
 * In my case I had to use the `/train` route to create the `model.pkl` before being able to get the predictions.
-* To restart the runner service in the instance again we need to go to the runner directory and then run `sudo ./svc.sh install` and then `sudo ./svc.sh start` 
+* To restart the runner service in the instance again we need to go to the runner directory and then run `sudo ./svc.sh install` and then `sudo ./svc.sh start`
+* Test 10
