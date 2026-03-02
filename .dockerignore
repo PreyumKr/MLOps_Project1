@@ -9,3 +9,6 @@ README.md
 LICENSE
 src.egg.-info
 notebook
+py
+uv.lock
+.python-version
