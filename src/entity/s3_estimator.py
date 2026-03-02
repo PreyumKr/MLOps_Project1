@@ -58,24 +58,37 @@ class Proj1Estimator:
                 return load_object(file_path=self.model_path)
             
             # Fallback to S3
-            logging.info(f"Local model not found. Attempting S3 download from {self.bucket_name}/{self.model_path}")
+            logging.info(f"Local model not found at {self.model_path}. Attempting S3 download from s3://{self.bucket_name}/{self.model_path}")
             s3_service = SimpleStorageService()
-            model = s3_service.load_model(
-                model_name=os.path.basename(self.model_path),
-                bucket_name=self.bucket_name,
-                model_dir=os.path.dirname(self.model_path) or None
+            
+            # Use model_path directly as the S3 key
+            model_file = s3_service.get_file_object(
+                filename=self.model_path,
+                bucket_name=self.bucket_name
             )
-            logging.info(f"Successfully loaded model from S3")
+            model_obj = s3_service.read_object(model_file, decode=False)
+            import pickle
+            model = pickle.loads(model_obj)
+            
+            logging.info(f"Successfully loaded model from S3: s3://{self.bucket_name}/{self.model_path}")
             return model
             
         except ClientError as e:
+            if e.response['Error']['Code'] == '404':
+                raise MyException(
+                    f"Model not found in S3 bucket '{self.bucket_name}' at key '{self.model_path}'. "
+                    f"Ensure the model has been trained and pushed to S3. "
+                    f"Check AWS credentials are set: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION",
+                    sys,
+                ) from e
             raise MyException(
-                f"Failed to load model from S3: {e}. Model file not found at {self.model_path}.",
+                f"AWS S3 error: {e}. Bucket: {self.bucket_name}, Key: {self.model_path}",
                 sys,
             ) from e
         except Exception as e:
             raise MyException(
-                f"Error loading model from {self.model_path}: {e}",
+                f"Error loading model from local path '{self.model_path}' or S3 's3://{self.bucket_name}/{self.model_path}': {e}. "
+                f"Check: (1) Local artifact exists, (2) AWS credentials set, (3) Model uploaded to S3",
                 sys,
             ) from e
 
