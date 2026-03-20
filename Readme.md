@@ -1,7 +1,7 @@
 # Project 1 - Vehicle Insurance Domain
 
 * We used a `template_generator` script to generate the skeleton of the project. 
-* We will learn the use of `-e .` in `pip install` or `uv add -r req.txt --dev` know as editable mode, we need a setup.py file to install the local code as python package
+* We will learn the use of `-e .` in `pip install` or `uv add -r requirements.txt --dev` know as editable mode, we need a setup.py file to install the local code as python package
 * We can use `conda create -n vehicle python=3.10 -y`  and then `conda activate vehicle` to create venv with python 3.10 and use it, even if its not already there in the system which is not possible with uv. 
 * We created a account in `MongoDB Atlas` Create a `Organization` and `Project`
 * Then we want to `create a cluster` in the Project, there we currently chose a `free tier` and default options that comes with it.
