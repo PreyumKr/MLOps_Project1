@@ -4,6 +4,5 @@
   publish = "." # Root directory for static files
 
 [functions]
-  included_files = ["main.py", "src/**/*.py", "requirements.txt"]
   directory = "netlify/functions"
-  python_version = "3.12"
+  included_files = ["main.py", "src/**/*.py", "requirements.txt"]
