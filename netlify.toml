@@ -1,5 +1,5 @@
 [build]
-  command = "pip install -r requirements.txt && npm install -g netlify-cli && cd netlify/functions/api && pip install -r requirements.txt"
+  command = "pip install -r requirements.txt"
   functions = "netlify/functions"
   publish = "public" # Or your static site's build output directory
 
