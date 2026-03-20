@@ -1,4 +1,10 @@
 [build]
-  command = ""
-  publish = "./"
-  functions = "./netlify/functions"
+  command = "pip install -r requirements.txt && npm install -g netlify-cli && cd netlify/functions/api && pip install -r requirements.txt"
+  functions = "netlify/functions"
+  publish = "public" # Or your static site's build output directory
+
+[functions]
+  node_bundler = "esbuild"
+  # For Python functions, this configuration is important
+  external_node_modules = ["@netlify/functions", "python-dotenv"]
+  included_files = ["main.py", "*.py", "*.txt", "*.toml", "*.json", "*.html", "*.css", "*.js", "*.png", "*.jpg", "*.gif", "*.svg", "*.woff", "*.woff2", "*.ttf", "*.eot"]
