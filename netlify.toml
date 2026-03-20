@@ -1,8 +1,9 @@
 [build]
   command = "pip install -r requirements.txt"
   functions = "netlify/functions"
-  publish = "." # Root directory for static files
+  publish = "."
 
 [functions]
   directory = "netlify/functions"
   included_files = ["main.py", "src/**/*.py", "requirements.txt"]
+  node_bundler = "none"
